@@ -2,30 +2,33 @@ import { xy_from_ij } from "./util.js"
 import { grid_size } from "./const.js"
 import { explode_at } from "./explosion.js"
 import { create_core, update_core, SINGLE } from "./rules.js"
+import { reactor } from "./reactor.js"
 
 const CORE = 'core'
 
 const canister_at = (i, j, color, resource, container, entities) => {
     const canister_container = new PIXI.Container()
+    const goo_container = new PIXI.Container()
+
     canister_container.core = create_core(1, SINGLE)
     canister_container.entity_type = CORE
     canister_container.update = () => {
-        // console.log("canister update", { core: canister_container.core })
         if (canister_container.core.expired) {
-            // console.log("expired; ignoring")
             return
         }
-        // console.log("calling update_core")
         const { cur_core, power_emitted, heat_emitted } = update_core(canister_container.core)
-        const { life_elapsed, life_span, expired } = cur_core
+
+        const { life_elapsed, life_span, expired } = cur_core // other two vars for drawing status bar
         canister_container.core = cur_core
-        // console.log({ power_emitted, heat_emitted, life_elapsed, life_span, expired })
-        if (canister_container.core.expired) {
-            container.removeChild(canister_container)
-            explode_at(place.x, place.y, resource, container)
+        if (expired) {
+            canister_container.core.expired = true
+            canister_container.removeChild(goo_container)
+        }
+        else {
+            reactor.add_power(power_emitted)
+            reactor.add_heat(heat_emitted)
         }
     }
-    // console.log('canister_at', {entities})
     entities.push(canister_container)
 
     const canister = new PIXI.Sprite(resource[`${color}-canister`].texture)
@@ -41,7 +44,6 @@ const canister_at = (i, j, color, resource, container, entities) => {
     const goo = new PIXI.AnimatedSprite(resource[selector].spritesheet.animations[selector])
     Object.assign(goo, place)
 
-    const goo_container = new PIXI.Container()
 
     let mask = new PIXI.Graphics()
     mask.beginFill(0xFFFFFF)
@@ -57,6 +59,7 @@ const canister_at = (i, j, color, resource, container, entities) => {
 
     canister.on('pointerdown', event => {
         container.removeChild(canister_container)
+        canister_container.core.expired = true
         explode_at(place.x, place.y, resource, container)
     })
 
@@ -64,8 +67,6 @@ const canister_at = (i, j, color, resource, container, entities) => {
     canister_container.addChild(goo_container)
     canister_container.addChild(canister)
     goo.play()
-
-    // console.log({cur_core, power_emitted, heat_emitted})
 }
 
 export { canister_at, CORE }

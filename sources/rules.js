@@ -10,6 +10,7 @@ const LIFE_SPAN = 'life_span'
 const POWER_RATE = 'power_rate'
 const AUTO_REBUILD = 'auto_rebuild'
 const CLOCK_RATE = 'clock_rate'
+const HEAT_DISSIPATION = 'heat_dissipation'
 
 const colors = {
     1: 'red',
@@ -87,7 +88,7 @@ const apply_upgrades = (tier, cluster) => {
     // console.log("applying", { tier, cluster })
     const use_rules = { ...core[tier][cluster] }
     // console.log({ use_rules })
-    upgrades_purchased.forEach(({upgrade_category, upgrade_type, tier:u_tier = null}) => { // null in case not a CORE upgrade
+    upgrades_purchased.forEach(({ upgrade_category, upgrade_type, tier: u_tier = null }) => { // null in case not a CORE upgrade
         // const [upgrade, u_tier] = key.split(".")
         // console.log({ type, tier })
         if (upgrade_category !== CORE_UPGRADES) { return }
@@ -137,19 +138,33 @@ const update_core = (cur_core) => {
 
 const tick_time = () => {
     let divider = 1
-    upgrades_purchased.forEach(({upgrade_category, upgrade_type, level}) => {
+    upgrades_purchased.forEach(({ upgrade_category, upgrade_type, level }) => {
         if (upgrade_category !== WORLD_UPGRADES || upgrade_type !== CLOCK_RATE) {
             return
         }
-        const upgrade = upgrades_available[upgrade_category][upgrade_type]//[level]
-// console.log({upgrades_available, upgrade_category, upgrade_type, level, upgrade})
+        const upgrade = upgrades_available[upgrade_category][upgrade_type]
+        // console.log({upgrades_available, upgrade_category, upgrade_type, level, upgrade})
         divider += upgrade.detail.add_divider
     })
     return base_tick_time / divider
 }
 
+const base_heat_dissipation = 0.1
+const heat_dissipation = () => {
+    let heat = base_heat_dissipation
+    upgrades_purchased.forEach(({ upgrade_category, upgrade_type, level }) => {
+        if (upgrade_category !== WORLD_UPGRADES || upgrade_type !== HEAT_DISSIPATION) {
+            return
+        }
+        const upgrade = upgrades_available[upgrade_category][upgrade_type]
+        heat *= upgrade.detail.multiplier
+    })
+    return heat
+}
+
 export {
     create_core,
+    heat_dissipation,
     tick_time,
     update_core,
     SINGLE,
