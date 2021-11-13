@@ -39,7 +39,6 @@ const core = [
     next[cur.tier][cur.cluster] = cur
     return next
 }, {})
-// console.log({ core })
 
 const core_upgrade_template = (upgrade, tier, level, cost, detail = {}) =>
 ({
@@ -71,11 +70,10 @@ const upgrades_available = {
         const next = { ...acc }
         next[cur.upgrade] ||= {}
         next[cur.upgrade][cur.tier] = cur
-        // console.log({ acc, next })
+        
         return next
     }, {})
 }
-// console.log({ upgrades_available })
 
 const upgrades_purchased = [
     // { upgrade_category: CORE_UPGRADES, upgrade_type: LIFE_SPAN, tier: 1, level: 1 },
@@ -85,12 +83,8 @@ const upgrades_purchased = [
 const create_core = (tier, cluster) => ({ ...core[tier][cluster] })
 
 const apply_upgrades = (tier, cluster) => {
-    // console.log("applying", { tier, cluster })
     const use_rules = { ...core[tier][cluster] }
-    // console.log({ use_rules })
     upgrades_purchased.forEach(({ upgrade_category, upgrade_type, tier: u_tier = null }) => { // null in case not a CORE upgrade
-        // const [upgrade, u_tier] = key.split(".")
-        // console.log({ type, tier })
         if (upgrade_category !== CORE_UPGRADES) { return }
         if (u_tier !== tier) { return }
         const upgrade = upgrades_available[CORE_UPGRADES][upgrade_type][tier]
@@ -110,14 +104,10 @@ const apply_upgrades = (tier, cluster) => {
 }
 
 const update_core = (cur_core) => {
-    // console.log("updating", { cur_core })
     const { tier, cluster, life_elapsed } = cur_core
-    // console.log({ tier, cluster, life_elapsed })
     const { life_span, power_rate, heat_rate, auto_rebuild } = apply_upgrades(tier, cluster)
-    // console.log({ life_span, power_rate, heat_rate, auto_rebuild })
 
     const expired = life_elapsed > life_span
-    // console.log({life_elapsed, life_span, expired})
     let new_life_elapsed = life_elapsed
     if (!expired) {
         new_life_elapsed += 1
@@ -143,7 +133,6 @@ const tick_time = () => {
             return
         }
         const upgrade = upgrades_available[upgrade_category][upgrade_type]
-        // console.log({upgrades_available, upgrade_category, upgrade_type, level, upgrade})
         divider += upgrade.detail.add_divider
     })
     return base_tick_time / divider

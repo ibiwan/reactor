@@ -1,8 +1,8 @@
 import { dims } from "./const.js"
-import { draw_areas } from "./areas.js";
 import { load_textures } from "./textures.js"
 import { make_reactor } from "./reactor.js"
 import { tick_time } from "./rules.js"
+import { make_control_panel } from "./control_panel.js";
 
 const app = new PIXI.Application(
     {
@@ -11,14 +11,17 @@ const app = new PIXI.Application(
     }
 );
 document.body.appendChild(app.view);
-const container = new PIXI.Container()
+
+const game_container = new PIXI.Container()
+app.stage.addChild(game_container)
+
 const loader = load_textures()
 
 const entities = []
 loader.load((loader, resource) => {
-    draw_areas(container)
-    make_reactor(resource, container, entities)
-    app.stage.addChild(container)
+    make_reactor(resource, game_container, entities)
+    make_control_panel(resource, game_container, entities) // call AFTER reactor
+
     app.ticker.add(handle_tick)
 })
 

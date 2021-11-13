@@ -1,21 +1,26 @@
-import { display_height, display_width } from "./const.js"
+import { border, control_width, display_width } from "./const.js"
 import { make_floor } from "./floor.js"
 import { heat_dissipation } from "./rules.js"
 
 let heat = 0
+let previous_power = 0
+let power_gained = 0
 let power = 0
 let money = 0
-let text // null, will be object
+let heat_dissipated = 0
 
-let reactor
 let reactor_container
 
-const make_reactor = (resource, container, entities) => {
+const make_reactor = (resource, parent_container, entities) => {
     reactor_container = new PIXI.Container()
-    container.addChild(reactor_container)
-    reactor = { update, add_power, add_heat, sell_power }
-    entities.push(reactor)
-    make_floor(resource, container, entities)
+    parent_container.addChild(reactor_container)
+
+    reactor_container.x = control_width + 2 * border
+    reactor_container.y = border
+
+    entities.push({ update }) // add BEFORE floor
+
+    make_floor(resource, reactor_container, entities)
 }
 
 const update = () => {
@@ -25,22 +30,12 @@ const update = () => {
 
     // 4. dissipate heat
     const heat_dissipated_max = heat_dissipation()
-    const heat_dissipated = Math.min(heat, heat_dissipated_max)
+    heat_dissipated = Math.min(heat, heat_dissipated_max)
     heat = Math.round((heat - heat_dissipated) * 100) / 100
+    power_gained = power - previous_power
+    previous_power = power
 
     // 5. push heat to outlets
-
-    // 6. update text
-    reactor_container.removeChild(text)
-    text = new PIXI.Text(`Heat: ${heat} MJ (-${heat_dissipated})\nPower: ${power} MW\nMoney: \$${money}`, {
-        fontFamily: 'Arial',
-        fontSize: 20,
-        fill: 0xff1010,
-        align: 'left',
-        wordWrap: true,
-        wordWrapWidth: display_width,
-    });
-    reactor_container.addChild(text)
 }
 
 const add_power = (amount) => {
@@ -54,4 +49,6 @@ const sell_power = () => {
     power = 0
 }
 
-export { reactor, make_reactor }
+const get_status = () => ({ power, power_gained, heat, heat_dissipated, money })
+
+export { make_reactor, add_power, add_heat, sell_power, get_status }

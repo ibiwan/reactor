@@ -11,13 +11,13 @@ const base_tick_time = 1000 // ms
 
 const dims = {
     gamewindow: { x: 0, y: 0, width: game_width, height: game_height },
-    controlpanel: { x: border, y: border, width: control_width - 2 * border, height: game_height - 2 * border },
-    reactorView: { x: control_width + border, y: border, width: floor_size - 2 * border, height: floor_size - 2 * border },
+    // controlpanel: { x: border, y: border, width: control_width - 2 * border, height: game_height - 2 * border },
+    // reactorView: { x: control_width + border, y: border, width: floor_size - 2 * border, height: floor_size - 2 * border },
 }
-Object.values(dims).forEach(obj => {
-    const { x, y, width: w, height: h } = obj
-    obj.flat = () => [x, y, w, h]
-})
+// Object.values(dims).forEach(obj => {
+//     const { x, y, width: w, height: h } = obj
+//     obj.flat = () => [x, y, w, h]
+// })
 
 export {
     base_tick_time,
