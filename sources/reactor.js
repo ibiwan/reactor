@@ -11,16 +11,16 @@ let heat_dissipated = 0
 
 let reactor_container
 
-const make_reactor = (resource, parent_container, entities) => {
+const make_reactor = (resource, parent_container, tock) => {
     reactor_container = new PIXI.Container()
     parent_container.addChild(reactor_container)
 
     reactor_container.x = control_width + 2 * border
     reactor_container.y = border
 
-    entities.push({ update }) // add BEFORE floor
+    tock(update)
 
-    make_floor(resource, reactor_container, entities)
+    make_floor(resource, reactor_container, tock)
 }
 
 const update = () => {

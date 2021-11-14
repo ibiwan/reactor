@@ -1,10 +1,11 @@
 const loader = PIXI.Loader.shared
 const load_textures = () => {
     loader
-        .add('floor', 'resources/floortile.png')
         .add('explosion', 'resources/explosion.json')
-        .add('red-fuel', 'resources/red-fuel.json')
+        .add('floor', 'resources/floortile.png')
+        .add('lcd-display', 'resources/lcd-display.jpg')
         .add('red-canister', 'resources/red-canister.png')
+        .add('red-fuel', 'resources/red-fuel.json')
     return loader
 }
 export { load_textures }

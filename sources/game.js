@@ -17,10 +17,18 @@ app.stage.addChild(game_container)
 
 const loader = load_textures()
 
-const entities = []
+const updaters = []
 loader.load((loader, resource) => {
-    make_reactor(resource, game_container, entities)
-    make_control_panel(resource, game_container, entities) // call AFTER reactor
+    const tock = f => {
+        updaters.push(f)
+        return () => {
+            const i = updaters.indexOf(f)
+            if (i) { updaters.splice(i, 1) }
+        }
+    }
+
+    make_reactor(resource, game_container, tock)
+    make_control_panel(resource, game_container, tock)
 
     app.ticker.add(handle_tick)
 })
@@ -36,5 +44,5 @@ const handle_tick = () => {
 }
 
 const update_world = () => {
-    entities.forEach(e => e.update())
+    updaters.forEach(f => f())
 }

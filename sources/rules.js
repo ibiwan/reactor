@@ -26,7 +26,7 @@ const core_template = (tier, cluster, life_span, power_rate, heat_rate) =>
     auto_rebuild: false,
 })
 
-const core = [
+const core_definitions = [
     core_template(1, SINGLE, 15, 1, 1),
     core_template(1, DOUBLE, 15, 4, 8),
     core_template(1, QUAD, 15, 12, 36),
@@ -76,14 +76,12 @@ const upgrades_available = {
 }
 
 const upgrades_purchased = [
-    // { upgrade_category: CORE_UPGRADES, upgrade_type: LIFE_SPAN, tier: 1, level: 1 },
-    // { upgrade_category: WORLD_UPGRADES, upgrade_type: CLOCK_RATE, level: 1 },
+    { upgrade_category: CORE_UPGRADES, upgrade_type: LIFE_SPAN, tier: 1, level: 1 },
+    { upgrade_category: WORLD_UPGRADES, upgrade_type: CLOCK_RATE, level: 1 },
 ]
 
-const create_core = (tier, cluster) => ({ ...core[tier][cluster] })
-
-const apply_upgrades = (tier, cluster) => {
-    const use_rules = { ...core[tier][cluster] }
+const apply_core_upgrades = (tier, cluster) => {
+    const use_rules = { ...core_definitions[tier][cluster] }
     upgrades_purchased.forEach(({ upgrade_category, upgrade_type, tier: u_tier = null }) => { // null in case not a CORE upgrade
         if (upgrade_category !== CORE_UPGRADES) { return }
         if (u_tier !== tier) { return }
@@ -101,29 +99,6 @@ const apply_upgrades = (tier, cluster) => {
         }
     })
     return use_rules
-}
-
-const update_core = (cur_core) => {
-    const { tier, cluster, life_elapsed } = cur_core
-    const { life_span, power_rate, heat_rate, auto_rebuild } = apply_upgrades(tier, cluster)
-
-    const expired = life_elapsed > life_span
-    let new_life_elapsed = life_elapsed
-    if (!expired) {
-        new_life_elapsed += 1
-    }
-
-    return {
-        cur_core: {
-            ...cur_core,
-            life_elapsed: new_life_elapsed,
-            life_span,
-            expired,
-            auto_rebuild,
-        },
-        power_emitted: expired ? 0 : power_rate,
-        heat_emitted: expired ? 0 : heat_rate,
-    }
 }
 
 const tick_time = () => {
@@ -152,10 +127,10 @@ const heat_dissipation = () => {
 }
 
 export {
-    create_core,
+    core_definitions,
+    apply_core_upgrades,
     heat_dissipation,
     tick_time,
-    update_core,
     SINGLE,
     DOUBLE,
     QUAD,

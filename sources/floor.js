@@ -1,18 +1,18 @@
 import { grid_num, grid_size } from "./const.js"
 import { make_canister } from "./canister.js"
 
-const make_floor = (resource, parent_container, entities) => {
+const make_floor = (resource, parent_container, tock) => {
     const floor_container = new PIXI.Container()
     parent_container.addChild(floor_container)
 
     for (let i = 0; i < grid_num; i += 1) {
         for (let j = 0; j < grid_num; j += 1) {
-            make_tile(i, j, resource, floor_container, entities)
+            make_tile(i, j, resource, floor_container, tock)
         }
     }
 }
 
-const make_tile = (i, j, resource, parent_container, entities) => {
+const make_tile = (i, j, resource, parent_container, tock) => {
     const tile_container = new PIXI.Container()
     parent_container.addChild(tile_container)
     tile_container.position.set(i * grid_size, j * grid_size)
@@ -27,11 +27,11 @@ const make_tile = (i, j, resource, parent_container, entities) => {
         interactive: true,
     })
 
-    floor_tile.on('pointerdown', () => floor_touched(resource, tile_container, entities))
+    floor_tile.on('pointerdown', () => floor_touched(resource, tile_container, tock))
 }
 
-const floor_touched = (resource, parent_container, entities) => {
-    make_canister('red', resource, parent_container, entities)
+const floor_touched = (resource, parent_container, tock) => {
+    make_canister('red', resource, parent_container, tock)
 }
 
 export { make_floor }

@@ -3,10 +3,11 @@ const floor_size = 600
 const game_width = 800
 const game_height = floor_size
 const control_width = game_width - floor_size
-const display_width = control_width - 2 * border
+const display_width = control_width - border
 const display_height = 200
+const section_height = (display_height - 2 * border) / 3
 const grid_num = 12
-const grid_size = (floor_size - 2 * border) / grid_num
+const grid_size = (floor_size - 3 * border) / grid_num
 const base_tick_time = 1000 // ms
 
 const dims = {
@@ -26,9 +27,7 @@ export {
     dims,
     display_height,
     display_width,
-    floor_size,
-    game_height,
-    game_width,
     grid_num,
-    grid_size
+    grid_size,
+    section_height,
 }
