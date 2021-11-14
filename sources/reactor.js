@@ -1,4 +1,4 @@
-import { border, control_width, display_width } from "./const.js"
+import { border, control_width, display_width, floor_y } from "./const.js"
 import { make_floor } from "./floor.js"
 import { heat_dissipation } from "./rules.js"
 
@@ -16,7 +16,7 @@ const make_reactor = (resource, parent_container, tock) => {
     parent_container.addChild(reactor_container)
 
     reactor_container.x = control_width + 2 * border
-    reactor_container.y = border
+    reactor_container.y = floor_y
 
     tock(update)
 

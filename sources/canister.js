@@ -1,4 +1,4 @@
-import { grid_size } from "./const.js"
+import { grid_size, origin } from "./const.js"
 import { explode_at } from "./explosion.js"
 import { apply_core_upgrades, core_definitions, SINGLE } from "./rules.js"
 import { add_heat, add_power } from "./reactor.js"
@@ -33,7 +33,7 @@ const make_canister = (color, resource, parent_container, tock) => {
     let mask = new PIXI.Graphics()
     goo_container.mask = mask
 
-    const loc = goo_container.toGlobal({ x: 0, y: 0 })
+    const loc = goo_container.toGlobal(origin)
     const maskRect = [
         loc.x + grid_size * 80 / 256,
         loc.y + grid_size * 64 / 256,
@@ -45,22 +45,19 @@ const make_canister = (color, resource, parent_container, tock) => {
     mask.endFill();
 
     let removeupdater
-
     canister.on('pointerdown', event => {
         canister_container.core.expired = true
         explode_at(canister_container, resource, parent_container)
         parent_container.removeChild(canister_container)
         removeupdater()
     })
+    removeupdater = tock(() => update(canister_container, goo_container))
 
     goo.play()
-
-    removeupdater = tock(() => update(canister_container, goo_container))
 }
 
 const update = (canister_container, goo_container) => {
     if (canister_container.core.expired) {
-        console.log("expired")
         return
     }
     const { cur_core, power_emitted, heat_emitted } = update_core(canister_container.core)
