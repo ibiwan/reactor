@@ -31,7 +31,7 @@ const make_tile = (i, j, resource, parent_container, tock) => {
 }
 
 const floor_touched = (resource, parent_container, tock) => {
-    make_canister('red', resource, parent_container, tock)
+    make_canister(1, resource, parent_container, tock)
 }
 
 export { make_floor }

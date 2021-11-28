@@ -48,7 +48,10 @@ const sell_power = () => {
     money += power
     power = 0
 }
+const vent_heat = () => {
+    heat -= 10
+}
 
 const get_status = () => ({ power, power_gained, heat, heat_dissipated, money })
 
-export { make_reactor, add_power, add_heat, sell_power, get_status }
+export { make_reactor, add_power, add_heat, sell_power, vent_heat, get_status }

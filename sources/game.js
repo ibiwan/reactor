@@ -3,6 +3,8 @@ import { load_textures } from "./textures.js"
 import { make_reactor } from "./reactor.js"
 import { tick_time } from "./rules.js"
 import { make_control_panel } from "./control_panel.js";
+import {store} from './store.js'
+// import a from './store.js'
 
 const app = new PIXI.Application(
     {
@@ -43,6 +45,6 @@ const handle_tick = () => {
     }
 }
 
-const update_world = () => {
-    updaters.forEach(f => f())
+const update_world = (displayOnly = false) => {
+    updaters.forEach(f => f(displayOnly))
 }
