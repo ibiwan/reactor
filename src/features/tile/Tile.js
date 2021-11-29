@@ -16,9 +16,10 @@ const TileContainerInner = (props) => {
             texture: floor_texture
         } } } }
     } = props
-    console.log({ i, j })
+    
     const grid_size = useSelector(selectGridSize)
     const tileClick = (i, j) => {console.log("clicked:", {i, j})}
+
     const Tile = (props) => {
         return <Sprite
             i={i}
@@ -30,9 +31,9 @@ const TileContainerInner = (props) => {
             pointerdown={()=>tileClick(i, j)}
             {...props} />;
     }
+    
     return (
         <Container position={{ x: i * grid_size, y: j * grid_size }} {...{ i, j }}>
-            {/* {tileRows[0]} */}
             <Tile></Tile>
         </Container>
     );

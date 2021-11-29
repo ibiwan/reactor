@@ -10,18 +10,12 @@ import { TileContainer } from '../tile/Tile';
 const FloorContainerInner = (_props) => {
     const grid_num = useSelector(state => state.geometry.grid_num)
 
-    const tileRows = []
-    for (let i = 0; i < grid_num; i++) {
-        const tileRow = []
-        for (let j = 0; j < grid_num; j++) {
-            tileRow.push(
-                (<TileContainer key={j} {...{ i, j }}></TileContainer>)
-            )
-        }
-        tileRows.push((
-            <Container key={i}>{tileRow}</Container>
-        ))
-    }
+    const seed = [...Array(grid_num)]
+    const tileRows =
+        seed.map((_, i) =>
+            seed.map((_, j) =>
+                (<TileContainer key={j} {...{ i, j }}></TileContainer>)))
+
     return (
         <Container>
             {tileRows}

@@ -10,13 +10,11 @@ export const loadTextures = createAsyncThunk(
     async (loader) => {
         console.log("loading...")
         load_textures(loader)
-        return new Promise((resolve, reject) => {
-            loader.load((loader, resource) => {
-                resolve()
-            })
+        return new Promise((resolve) => {
+            loader.load(() => resolve())
         });
-    })
-
+    }
+)
 
 export const gameSlice = createSlice({
     name: 'game',

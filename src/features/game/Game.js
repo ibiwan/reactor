@@ -18,8 +18,6 @@ const GameContainerInner = ({ app: { loader } }) => {
 
     if (!texturesLoaded) { return (<></>) }
 
-    console.log("textures loaded; rendering game")
-
     return (
         <ReactorContainer ></ReactorContainer>
     );
