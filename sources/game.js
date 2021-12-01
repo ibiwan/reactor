@@ -3,8 +3,6 @@ import { load_textures } from "./textures.js"
 import { make_reactor } from "./reactor.js"
 import { tick_time } from "./rules.js"
 import { make_control_panel } from "./control_panel.js";
-import {store} from './store.js'
-// import a from './store.js'
 
 const app = new PIXI.Application(
     {
