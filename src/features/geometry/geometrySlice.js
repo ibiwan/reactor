@@ -35,9 +35,33 @@ const geometrySlice = createSlice({
 
 export const { windowChanged } = geometrySlice.actions
 
+export const selectGridNum = ({ geometry: { grid_num } }) => grid_num
+export const selectBorder = ({ geometry: { border } }) => border
+
 export const selectFloorY = ({ geometry: { game_height, floor_size, border } }) => game_height - floor_size + border
 export const selectControlWidth = ({ geometry: { game_width, floor_size } }) => game_width - floor_size
 export const selectDisplayTextOffset = ({ geometry: { display_border } }) => ({ x: display_border, y: display_border })
-export const selectGridSize = ({geometry:{floor_size, border, grid_num}}) => (floor_size - 3 * border) / grid_num
+export const selectGridSize = ({ geometry: { floor_size, border, grid_num } }) => (floor_size - 3 * border) / grid_num
+export const selectReactorPosition = (state) => {
+    const border = selectBorder(state)
+    const control_width = selectControlWidth(state)
+    const floor_y = selectFloorY(state)
+    return {
+        x: control_width + 2 * border,
+        y: floor_y,
+    }
+}
+export const selectMaskRect = ({ i, j }) => (state) => {
+    const { x: rX, y: rY } = selectReactorPosition(state)
+    const grid_size = selectGridSize(state)
+    const tileX = i * grid_size
+    const tileY = j * grid_size
+    return [
+        rX + tileX + grid_size * 80 / 256,
+        rY + tileY + grid_size * 64 / 256,
+        grid_size * 96 / 256,
+        grid_size * 144 / 256,
+    ]
+}
 
-export default geometrySlice.reducer;
+export default geometrySlice.reducer

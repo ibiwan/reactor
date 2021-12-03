@@ -1,26 +1,27 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react'
+import { useSelector } from 'react-redux'
 import {
     Container,
     withApp
 } from 'react-pixi-fiber'
 
-import { TileContainer } from '../tile/Tile';
+import { TileContainer } from '../tile/Tile'
+import { selectGridNum } from '../geometry/geometrySlice'
 
-const FloorContainerInner = (_props) => {
-    const grid_num = useSelector(state => state.geometry.grid_num)
+const FloorContainerInner = () => {
+    const grid_num = useSelector(selectGridNum)
 
     const seed = [...Array(grid_num)]
     const tileRows =
         seed.map((_, i) =>
             seed.map((_, j) =>
-                (<TileContainer key={j} {...{ i, j }}></TileContainer>)))
+                (<TileContainer key={j} {...{ i, j }} />)))
 
     return (
         <Container>
             {tileRows}
         </Container>
-    );
+    )
 }
 
-export const FloorContainer = withApp(FloorContainerInner);
+export const FloorContainer = withApp(FloorContainerInner)

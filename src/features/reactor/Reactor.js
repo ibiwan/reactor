@@ -1,26 +1,23 @@
-import React  from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react'
+import { useSelector } from 'react-redux'
 import {
     Container,
     withApp
 } from 'react-pixi-fiber'
 
-import { selectControlWidth, selectFloorY } from '../geometry/geometrySlice';
-import { FloorContainer } from '../floor/Floor';
+import {
+    selectReactorPosition,
+} from '../geometry/geometrySlice'
+import { FloorContainer } from '../floor/Floor'
 
-const ReactorContainerInner = (_props) => {
-    const control_width = useSelector(selectControlWidth)
-    const border = useSelector(state => state.geometry.border)
-    const floor_y = useSelector(selectFloorY)
+const ReactorContainerInner = () => {
+    const position = useSelector(selectReactorPosition)
 
     return (
-        <Container position={{
-            x: control_width + 2 * border,
-            y: floor_y,
-        }}>
-            <FloorContainer></FloorContainer>
+        <Container position={position}        >
+            <FloorContainer />
         </Container>
-    );
+    )
 }
 
-export const ReactorContainer = withApp(ReactorContainerInner);
+export const ReactorContainer = withApp(ReactorContainerInner)

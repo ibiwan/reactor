@@ -1,26 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from 'react'
 import {
     useSelector,
     useDispatch
-} from 'react-redux';
-import { withApp } from 'react-pixi-fiber'
-import { loadTextures } from './gameSlice';
-import { ReactorContainer } from '../reactor/Reactor';
+} from 'react-redux'
+import {
+    withApp,
+} from 'react-pixi-fiber'
+import { loadTextures, selectTexturesLoaded } from './gameSlice'
+import { ReactorContainer } from '../reactor/Reactor'
 
 const GameContainerInner = ({ app: { loader } }) => {
-    const texturesLoaded = useSelector(state => state.game.texturesLoaded)
+    const texturesLoaded = useSelector(selectTexturesLoaded)
 
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(loadTextures(loader))
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    const dispatch = useDispatch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => { dispatch(loadTextures(loader)) }, [])
 
     if (!texturesLoaded) { return (<></>) }
 
     return (
         <ReactorContainer ></ReactorContainer>
-    );
+    )
 }
 
-export const GameContainer = withApp(GameContainerInner);
+export const GameContainer = withApp(GameContainerInner)
