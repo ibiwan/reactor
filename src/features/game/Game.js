@@ -6,7 +6,7 @@ import {
 import {
     withApp,
 } from 'react-pixi-fiber'
-import { loadTextures, selectTexturesLoaded } from './gameSlice'
+import { loadTextures, selectTexturesLoaded, gameTick } from './gameSlice'
 import { ReactorContainer } from '../reactor/Reactor'
 
 const GameContainerInner = ({ app: { loader } }) => {
@@ -15,6 +15,11 @@ const GameContainerInner = ({ app: { loader } }) => {
     const dispatch = useDispatch()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => { dispatch(loadTextures(loader)) }, [])
+    useEffect(() => { 
+        console.log("starting tick cycle")
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        dispatch(gameTick())
+     }, [])
 
     if (!texturesLoaded) { return (<></>) }
 

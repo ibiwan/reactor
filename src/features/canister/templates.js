@@ -78,7 +78,7 @@ export const core_definitions = [
     core_template(2, QUAD, 60, 1.8e3, 5.4e3),
 ].reduce((acc, cur) => {
     const next = { ...acc }
-    next[cur.tier] = next[cur.tier] || {}
+    next[cur.tier] = next[cur.tier] ?? {}
     next[cur.tier][cur.cluster] = cur
     return next
 }, {})

@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+import { SINGLE, DOUBLE, QUAD } from '../canister/templates'
+
 const border = 3
 const button_height = 48
 const game_width = 900
@@ -29,6 +31,7 @@ const geometrySlice = createSlice({
     reducers: {
         windowChanged: state => ({
             ...state // for example
+            // but with immer you don't have to merge just make the changes
         }),
     }
 })
@@ -51,17 +54,22 @@ export const selectReactorPosition = (state) => {
         y: floor_y,
     }
 }
-export const selectMaskRect = ({ i, j }) => (state) => {
+export const selectMaskRects = ({ i, j }) => (state) => {
     const { x: rX, y: rY } = selectReactorPosition(state)
     const grid_size = selectGridSize(state)
     const tileX = i * grid_size
     const tileY = j * grid_size
-    return [
-        rX + tileX + grid_size * 80 / 256,
-        rY + tileY + grid_size * 64 / 256,
-        grid_size * 96 / 256,
-        grid_size * 144 / 256,
-    ]
+
+    return {
+        [SINGLE]: [[
+            rX + tileX + grid_size * 80 / 256,
+            rY + tileY + grid_size * 64 / 256,
+            grid_size * 96 / 256,
+            grid_size * 144 / 256,
+        ]],
+        [DOUBLE]: [[]],
+        [QUAD]: [[]],
+    }
 }
 
 export default geometrySlice.reducer

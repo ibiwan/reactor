@@ -21,7 +21,7 @@ const TileContainerInner = ({ app, i, j }) => {
     const canister = useSelector(selectCanisterAt(i, j))
 
     const tileClick = (i, j) => {
-        console.log("tile clicked:", { i, j })
+        // console.log("tile clicked:", { i, j })
         dispatch(addCanister({ i, j, tier: 1 }))
     }
 

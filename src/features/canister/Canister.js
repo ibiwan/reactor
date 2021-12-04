@@ -5,10 +5,11 @@ import {
     Sprite,
     withApp,
 } from 'react-pixi-fiber'
-
-import { selectGridSize, selectMaskRect } from '../geometry/geometrySlice'
 import { Graphics } from '@pixi/graphics'
+
+import { selectGridSize, selectMaskRects } from '../geometry/geometrySlice'
 import AnimatedSprite from '../../util/AnimatedSprite'
+import { SINGLE, DOUBLE, QUAD } from './templates'
 
 export const CanisterContainerInner = ({ app, canister }) => {
     const grayCanister = 'gray-canister'
@@ -34,7 +35,7 @@ export const CanisterContainerInner = ({ app, canister }) => {
     const grid_size = useSelector(selectGridSize)
 
     const canisterClick = (i, j) => {
-        console.log("canister clicked:", { i, j })
+        // console.log("canister clicked:", { i, j })
     }
 
     const Can = () => {
@@ -48,13 +49,23 @@ export const CanisterContainerInner = ({ app, canister }) => {
         />
     }
 
-    const Fuel = ({ i, j }) => {
-        const mask_rect = useSelector(selectMaskRect({ i, j }))
+    const mask_rect_defs = useSelector(selectMaskRects({ i, j }))
+
+    const makeMask = (i, j, type = SINGLE) => {
         const mask = new Graphics()
+        const mask_rects = mask_rect_defs[type]
+
         mask.beginFill(0xFFFFFF)
-        mask.drawRect(...mask_rect)
+        mask_rects.forEach(mask_rect => {
+            mask.drawRect(...mask_rect)
+        })
         mask.endFill();
 
+        return mask
+    }
+
+    const Fuel = ({ i, j }) => {
+        const mask = makeMask(i, j)
         return <AnimatedSprite
             width={grid_size}
             height={grid_size}
