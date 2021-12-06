@@ -12,38 +12,30 @@ export const reactorSlice = createSlice({
     name: 'reactor',
     initialState,
     reducers: {
-        addPower: (state, action) => {
-            const { power } = action.payload
-            console.log({action, power})
-            state.power += power
+        addPower: (stateSlice, action) => {
+            const power = action.payload
+            stateSlice.power += power
         },
-        addHeat: (state, action) => {
+        addHeat: (stateSlice, action) => {
+            const heat = action.payload
+            stateSlice.heat += heat
+        },
+        sellPower: (stateSlice, _action) => {
+            stateSlice.money += stateSlice.reactor.power
+            stateSlice.power = 0
+        },
+        ventHeat: (stateSlice, action) => {
             const { heat } = action.payload
-            state.heat += heat
-        },
-        sellPower: (state, _action) => {
-            state.money += state.reactor.power
-            state.power = 0
-        },
-        ventHeat: (state, action) => {
-            const { heat } = action.payload
-            state.heat -= heat
+            stateSlice.heat -= heat
         },
     },
-    // extraReducers: builder => {
-    //     builder
-    //         .addCase(gameTick.pending, (state, action) => {
-    //             // console.log("reactor slice hears game tick!", { state, action })
-    //         })
-    // }
 })
 
 export const { addPower, addHeat, sellPower, ventHeat } = reactorSlice.actions;
 
-console.log({gameTick})
-addListener(gameTick.pending.type, (storeApi, action)=>{
-    const {dispatch} = storeApi
-    dispatch(addPower(5))
+addListener(gameTick.pending.type, (storeApi, action) => {
+    const { dispatch, getState } = storeApi
+    console.log('reactorSlice gameTick listener')
 })
 
 export default reactorSlice.reducer

@@ -29,10 +29,7 @@ const geometrySlice = createSlice({
         base_tick_time,
     },
     reducers: {
-        windowChanged: state => ({
-            ...state // for example
-            // but with immer you don't have to merge just make the changes
-        }),
+        windowChanged: _stateSlice => { },
     }
 })
 

@@ -51,11 +51,6 @@ const TIERS = {
         color: COLOR_BRIGHT_ORANGE,
         name: 'Stavrium'
     },
-    12: {
-        // color: "red saber",
-        color: COLOR_DARK_ORANGE,
-        name: 'Stavrium Also'
-    },
 }
 const core_template = (tier, cluster, life_span, power_rate, heat_rate) => {
     const { color: colorId, name } = TIERS[tier]

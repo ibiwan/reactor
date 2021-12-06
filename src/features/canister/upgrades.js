@@ -50,17 +50,11 @@ const upgrades_purchased = [
 
 export const apply_core_upgrades = (tier, cluster) => {
     const use_rules = { ...core_definitions[tier][cluster] }
-    // console.log({ use_rules })
     upgrades_purchased.forEach((upgrade_details) => { // null in case not a CORE upgrade
-        // console.log({ upgrade_details })
         const { upgrade_category, upgrade_type, tier: u_tier = null } = upgrade_details
         if (upgrade_category !== CORE_UPGRADES) { return }
-        // console.log("is core")
         if (u_tier !== tier) { return }
-        // console.log("matches tier")
-        // console.log({ upgrades_available, CORE_UPGRADES, upgrade_type, tier })
         const upgrade = upgrades_available[CORE_UPGRADES][upgrade_type][tier]
-        // console.log({ upgrade })
         switch (upgrade_type) {
             case LIFE_SPAN:
                 use_rules.life_span *= upgrade.detail.factor

@@ -5,7 +5,6 @@ import gameReducer from '../features/game/gameSlice'
 import geometryReducer from '../features/geometry/geometrySlice'
 import reactorReducer from '../features/reactor/reactorSlice'
 import { listenWare } from '../util/listener'
-// import { listenerMiddleware } from '../util/listener'
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +13,5 @@ export const store = configureStore({
     reactor: reactorReducer,
     canister: canisterReducer,
   },
-  // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(listenerMiddleware),
   middleware: getDefault => [...getDefault(), listenWare]
 })

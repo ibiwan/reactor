@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { addListener, listenerMiddleware } from '../../util/listener'
-import { fold_fields, sum } from '../../util/structures'
+import { addListener } from '../../util/listener'
 import { gameTick } from '../game/gameSlice'
+import { addHeat, addPower } from '../reactor/reactorSlice'
 import { core_definitions, SINGLE } from './templates'
 import { apply_core_upgrades } from './upgrades'
 
@@ -13,38 +13,44 @@ export const canisterSlice = createSlice({
     name: 'canister',
     initialState,
     reducers: {
-        addCanister: (state, action) => {
+        addCanister: (stateSlice, action) => {
             const { i, j, tier } = action.payload
             const details = core_definitions[tier][SINGLE]
-            const newCan = { i, j, ...details }
-            state.canisters.push(newCan)
+            const new_canister = { i, j, ...details }
+            stateSlice.canisters.push(new_canister)
+        },
+        updateCanister: (stateSlice, { payload: new_canister }) => {
+            const { i, j } = new_canister
+            const canister = findCanisterIn(i, j, stateSlice.canisters)
+            Object.assign(canister, new_canister)
         }
     },
-    extraReducers: builder => {
-        builder
-            .addCase(gameTick.pending, (state, action) => {
-                console.log("canister slice hears game tick!", { state, action })
-                const canisters = selectCanisters(state)
-                const updates = canisters.map(updateCanister)
-                const update = fold_fields(updates, sum, 0)
-                // console.log({ update })
-                // try {
-                    // console.log({ r: state.reactor })
-                    // state.reactor.heat += update.heat_emitted
-                    // state.reactor.power += update.power_emitted
-                // }
-                // catch (e) { console.log('add heat/power error', { e }) }
-            })
-    }
 })
 
-const selectCanisters = ({ canisters }) => canisters
+export const { addCanister, updateCanister } = canisterSlice.actions;
 
-const updateCanister = canister => {
-    // console.log("update")
+addListener(gameTick.pending.type, ({ getState, dispatch }) => {
+    selectCanisters(getState()).forEach(canister => {
+        const updates = getUpdatedCanister(canister)
+        if (updates) {
+            const { new_canister, power_emitted, heat_emitted } = updates
+            dispatch(updateCanister(new_canister))
+            dispatch(addPower(power_emitted))
+            dispatch(addHeat(heat_emitted))
+        }
+    });
+})
 
+const selectCanisters = ({ canister: { canisters } }) => canisters
+const findCanisterIn = (i, j, canisters) => canisters.find(c => c.i === i && c.j === j)
+export const selectCanisterAt = (i, j) => (state) => {
+    const { canister: { canisters } } = state
+    return findCanisterIn(i, j, canisters)
+}
+
+const getUpdatedCanister = (canister) => {
     if (canister.expired) {
-        return
+        return false
     }
 
     const { tier, cluster, life_elapsed } = canister
@@ -55,11 +61,9 @@ const updateCanister = canister => {
     let new_life_elapsed = life_elapsed
     if (!expired) {
         new_life_elapsed += 1
-    } else {
-        // console.log("EXPIRED!!")
     }
 
-    Object.assign(canister, {
+    const new_canister = Object.assign({}, canister, {
         life_elapsed: new_life_elapsed,
         life_span,
         expired,
@@ -67,21 +71,10 @@ const updateCanister = canister => {
     })
 
     return {
+        new_canister,
         power_emitted: expired ? 0 : power_rate,
         heat_emitted: expired ? 0 : heat_rate,
     }
 }
-
-export const { addCanister } = canisterSlice.actions;
-
-// console.log("adding listener", { listenerMiddleware, addCanister })
-// listenerMiddleware.addListener(addCanister, async () => {
-//     console.log("addCanister noticed by middleware")
-// })
-
-// console.log({t:addCanister.type})
-// addListener(addCanister.type, ()=>{})
-
-export const selectCanisterAt = (i, j) => ({ canister: { canisters } }) => canisters.find(c => c.i === i && c.j === j)
 
 export default canisterSlice.reducer

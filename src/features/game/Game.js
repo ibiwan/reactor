@@ -16,7 +16,7 @@ const GameContainerInner = ({ app: { loader } }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => { dispatch(loadTextures(loader)) }, [])
     useEffect(() => { 
-        console.log("starting tick cycle")
+        console.log("starting main tick cycle")
         // eslint-disable-next-line react-hooks/exhaustive-deps
         dispatch(gameTick())
      }, [])
