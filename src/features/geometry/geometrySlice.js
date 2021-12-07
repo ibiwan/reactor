@@ -1,4 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { Graphics } from '@pixi/graphics'
+import { constructMask } from '../canister/fuelMask'
 
 import { SINGLE, DOUBLE, QUAD } from '../canister/templates'
 
@@ -67,6 +69,11 @@ export const selectMaskRects = ({ i, j }) => (state) => {
         [DOUBLE]: [[]],
         [QUAD]: [[]],
     }
+}
+export const selectMasks = (i, j, cluster) => state => {
+    const mask_rect_defs = selectMaskRects({i, j})(state)
+    const mask = new Graphics()
+    return constructMask(mask, mask_rect_defs, cluster)
 }
 
 export default geometrySlice.reducer

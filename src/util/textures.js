@@ -1,3 +1,6 @@
+const grayCanister = 'gray-canister'
+const grayFuel = 'gray-fuel'
+
 const load_textures = (loader) => {
     loader
         .add('explosion', 'resources/explosion.json')
@@ -12,3 +15,18 @@ const load_textures = (loader) => {
     return loader
 }
 export { load_textures }
+
+let _floor_texture
+export const loadedFloorTexture = app =>
+    _floor_texture ||
+    (_floor_texture = app.loader.resources.floor.texture)
+
+let _gray_can_texture
+export const loadedCanisterTexture = app =>
+    _gray_can_texture ||
+    (_gray_can_texture = app.loader.resources[grayCanister].texture)
+
+let _fuel_animation
+export const loadedFuelAnimation = app =>
+    _fuel_animation ||
+    (_fuel_animation = app.loader.resources[grayFuel].spritesheet.animations[grayFuel])

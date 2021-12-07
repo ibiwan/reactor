@@ -6,10 +6,11 @@ import {
 } from 'react-pixi-fiber'
 
 import { TileContainer } from '../tile/Tile'
-import { selectGridNum } from '../geometry/geometrySlice'
+import { selectGridNum, selectReactorPosition } from '../geometry/geometrySlice'
 
 const FloorContainerInner = () => {
     const grid_num = useSelector(selectGridNum)
+    const position = useSelector(selectReactorPosition)
 
     const seed = [...Array(grid_num)]
     const tileRows =
@@ -18,7 +19,7 @@ const FloorContainerInner = () => {
                 (<TileContainer key={j} {...{ i, j }} />)))
 
     return (
-        <Container>
+        <Container position={position}>
             {tileRows}
         </Container>
     )

@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { addListener } from '../../util/listener'
 import { gameTick } from '../game/gameSlice'
 import { addHeat, addPower } from '../reactor/reactorSlice'
-import { core_definitions, SINGLE } from './templates'
+import { core_definitions } from './templates'
 import { apply_core_upgrades } from './upgrades'
 
 const initialState = {
@@ -14,8 +14,8 @@ export const canisterSlice = createSlice({
     initialState,
     reducers: {
         addCanister: (stateSlice, action) => {
-            const { i, j, tier } = action.payload
-            const details = core_definitions[tier][SINGLE]
+            const { i, j, tier, cluster } = action.payload
+            const details = core_definitions[tier][cluster]
             const new_canister = { i, j, ...details }
             stateSlice.canisters.push(new_canister)
         },
