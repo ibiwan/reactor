@@ -19,15 +19,20 @@ export const canisterSlice = createSlice({
             const new_canister = { i, j, ...details }
             stateSlice.canisters.push(new_canister)
         },
-        updateCanister: (stateSlice, { payload: new_canister }) => {
-            const { i, j } = new_canister
+        updateCanister: (stateSlice, { payload: updated_canister }) => {
+            const { i, j } = updated_canister
             const canister = findCanisterIn(i, j, stateSlice.canisters)
-            Object.assign(canister, new_canister)
-        }
+            Object.assign(canister, updated_canister)
+        },
+        removeCanister: (stateSlice, { payload: { i: dead_i, j: dead_j } }) => {
+            stateSlice.canisters = stateSlice.canisters.filter(({ i, j }) =>
+                i !== dead_i || j !== dead_j
+            )
+        },
     },
 })
 
-export const { addCanister, updateCanister } = canisterSlice.actions;
+export const { addCanister, updateCanister, removeCanister } = canisterSlice.actions;
 
 addListener(gameTick.pending.type, ({ getState, dispatch }) => {
     selectCanisters(getState()).forEach(canister => {
@@ -42,7 +47,9 @@ addListener(gameTick.pending.type, ({ getState, dispatch }) => {
 })
 
 const selectCanisters = ({ canister: { canisters } }) => canisters
+
 const findCanisterIn = (i, j, canisters) => canisters.find(c => c.i === i && c.j === j)
+
 export const selectCanisterAt = (i, j) => (state) => {
     const { canister: { canisters } } = state
     return findCanisterIn(i, j, canisters)

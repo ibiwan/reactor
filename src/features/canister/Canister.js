@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {
     Container,
     Sprite,
@@ -9,21 +9,27 @@ import {
 import { selectGridSize } from '../geometry/geometrySlice'
 import { Fuel } from './Fuel'
 import { loadedCanisterTexture } from '../../util/textures'
+import { removeCanister } from './canisterSlice'
+import { addExplosion } from '../explosion/explosionSlice'
 
-export const CanisterContainerInner = ({ app, canister }) => {
+const CanisterContainerInner = ({ app, canister }) => {
     const {
         i, j,
         colors: {
             canister: canister_tint,
-        }
+        },
+        expired,
     } = canister
 
-    const canister_texture = useMemo(()=>loadedCanisterTexture(app), [])// further select with cluster
+    const dispatch = useDispatch()
+
+    const canister_texture = useMemo(() => loadedCanisterTexture(app), [])// further select with cluster
 
     const grid_size = useSelector(selectGridSize)
 
     const canisterClick = (i, j) => {
-        // console.log("canister clicked:", { i, j })
+        dispatch(addExplosion({ i, j }))
+        dispatch(removeCanister({ i, j }))
     }
 
     const Shell = () => {
@@ -40,7 +46,9 @@ export const CanisterContainerInner = ({ app, canister }) => {
 
     return (
         <Container>
-            <Fuel {...canister} />
+            {!expired &&
+                <Fuel {...canister} />
+            }
             <Shell />
         </Container>
     )

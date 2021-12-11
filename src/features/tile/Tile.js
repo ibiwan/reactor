@@ -11,16 +11,18 @@ import { addCanister, selectCanisterAt } from '../canister/canisterSlice'
 import { CanisterContainer } from '../canister/Canister'
 import { SINGLE } from '../canister/templates'
 import { loadedFloorTexture } from '../../util/textures'
+import { selectExplosionAt } from '../explosion/explosionSlice'
+import { Explosion } from '../explosion/Explosion '
 
 const TileContainerInner = ({ app, i, j }) => {
     const floor_texture = useMemo(() => loadedFloorTexture(app), [])
 
     const grid_size = useSelector(selectGridSize)
     const canister = useSelector(selectCanisterAt(i, j))
+    const explosion = useSelector(selectExplosionAt(i, j))
 
     const dispatch = useDispatch()
     const tileClick = (i, j) => {
-        // console.log("tile clicked:", { i, j })
         dispatch(addCanister({ i, j, tier: 1, cluster: SINGLE }))
     }
 
@@ -39,7 +41,10 @@ const TileContainerInner = ({ app, i, j }) => {
         <Container position={{ x: i * grid_size, y: j * grid_size }} >
             <Tile />
             {canister &&
-                <CanisterContainer canister={canister} />
+                <CanisterContainer {...{ canister }} />
+            }
+            {explosion &&
+                <Explosion {...{ explosion }} />
             }
         </Container>
     )
