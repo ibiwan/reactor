@@ -4,10 +4,12 @@ import {
     useDispatch
 } from 'react-redux'
 import {
+    Container,
     withApp,
 } from 'react-pixi-fiber'
 import { loadTextures, selectTexturesLoaded, gameTick } from './gameSlice'
 import { ReactorContainer } from '../reactor/Reactor'
+import { ControlPanelContainer } from '../controlPanel/ControlPanel'
 
 const GameInner = ({ app: { loader } }) => {
     const texturesLoaded = useSelector(selectTexturesLoaded)
@@ -17,13 +19,17 @@ const GameInner = ({ app: { loader } }) => {
     useEffect(() => { dispatch(loadTextures(loader)) }, [])
     useEffect(() => {
         console.log("starting main tick cycle")
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         dispatch(gameTick())
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     if (!texturesLoaded) { return (<></>) }
 
-    return <ReactorContainer />
+    return <Container>
+        <ReactorContainer />
+        <ControlPanelContainer />
+        {/* <StatusWindow /> */}
+    </Container>
 }
 
 export const Game = withApp(GameInner)

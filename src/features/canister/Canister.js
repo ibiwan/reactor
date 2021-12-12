@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
     Container,
@@ -23,6 +23,7 @@ const CanisterContainerInner = ({ app, canister }) => {
 
     const dispatch = useDispatch()
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const canister_texture = useMemo(() => loadedCanisterTexture(app), [])// further select with cluster
 
     const grid_size = useSelector(selectGridSize)

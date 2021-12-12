@@ -7,9 +7,7 @@ const ReactorContainerInner = () => {
 
     return (
         <Container>
-            {/* // controls */}
-            {/* // output screen */}
-            {/* // available items */}
+            {/* <StatusWindow /> */}
             <FloorContainer />
         </Container>
     )

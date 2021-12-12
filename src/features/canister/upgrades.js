@@ -6,7 +6,7 @@ const LIFE_SPAN = 'life_span'
 const POWER_RATE = 'power_rate'
 const AUTO_REBUILD = 'auto_rebuild'
 const CLOCK_RATE = 'clock_rate'
-const HEAT_DISSIPATION = 'heat_dissipation'
+// const HEAT_DISSIPATION = 'heat_dissipation'
 
 const core_upgrade_template = (upgrade, tier, level, cost, detail = {}) =>
 ({
@@ -64,6 +64,8 @@ export const apply_core_upgrades = (tier, cluster) => {
                 break
             case AUTO_REBUILD:
                 use_rules.auto_rebuild = true
+                break
+            default:
                 break
         }
     })

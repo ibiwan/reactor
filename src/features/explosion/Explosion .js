@@ -12,8 +12,10 @@ const ExplosionInner = ({ app, explosion: { i, j } }) => {
 
     const grid_size = useSelector(selectGridSize)
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const explosion_animation = useMemo(() => loadedExplosionAnimation(app), [])
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const onComplete = useMemo(() => () => { dispatch(removeExplosion({ i, j })) }, [])
 
     const props = {

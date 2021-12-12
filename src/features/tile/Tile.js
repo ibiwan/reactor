@@ -15,6 +15,7 @@ import { selectExplosionAt } from '../explosion/explosionSlice'
 import { Explosion } from '../explosion/Explosion '
 
 const TileContainerInner = ({ app, i, j }) => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const floor_texture = useMemo(() => loadedFloorTexture(app), [])
 
     const grid_size = useSelector(selectGridSize)

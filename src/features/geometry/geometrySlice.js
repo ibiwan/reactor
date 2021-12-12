@@ -25,25 +25,28 @@ const geometrySlice = createSlice({
         display_height,
         display_border,
         button_text_offset: { y: 10 },
-        section_height: display_height + button_height + 2 * border,
         origin: { x: 0, y: 0 },
         grid_num,
         base_tick_time,
     },
-    reducers: {
-        windowChanged: _stateSlice => { },
-    }
 })
-
-export const { windowChanged } = geometrySlice.actions
 
 export const selectGridNum = ({ geometry: { grid_num } }) => grid_num
 export const selectBorder = ({ geometry: { border } }) => border
+export const selectDisplayHeight = ({geometry:{display_height}}) => display_height
 
 export const selectFloorY = ({ geometry: { game_height, floor_size, border } }) => game_height - floor_size + border
 export const selectControlWidth = ({ geometry: { game_width, floor_size } }) => game_width - floor_size
 export const selectDisplayTextOffset = ({ geometry: { display_border } }) => ({ x: display_border, y: display_border })
 export const selectGridSize = ({ geometry: { floor_size, border, grid_num } }) => (floor_size - 3 * border) / grid_num
+export const selectSectionHeight = ({geometry:{display_height, button_height, border}}) => display_height + button_height + 2 * border
+
+export const selectControlPanelHeight = (state) => {
+    const section_height = selectSectionHeight(state)
+    const border = selectBorder(state)
+    return (section_height + border) * 3
+}
+
 export const selectReactorPosition = (state) => {
     const border = selectBorder(state)
     const control_width = selectControlWidth(state)
@@ -53,6 +56,7 @@ export const selectReactorPosition = (state) => {
         y: floor_y,
     }
 }
+
 export const selectMaskRects = ({ i, j }) => (state) => {
     const { x: rX, y: rY } = selectReactorPosition(state)
     const grid_size = selectGridSize(state)
@@ -70,6 +74,7 @@ export const selectMaskRects = ({ i, j }) => (state) => {
         [QUAD]: [[]],
     }
 }
+
 export const selectMasks = (i, j, cluster) => state => {
     const mask_rect_defs = selectMaskRects({i, j})(state)
     const mask = new Graphics()

@@ -4,8 +4,11 @@ import { gameTick } from '../game/gameSlice'
 
 const initialState = {
     heat: 0,
+    heat_dissipated: 0,
     power: 0,
+    power_gained: 0,
     money: 0,
+    money_gained: 0,
 }
 
 export const reactorSlice = createSlice({
@@ -33,8 +36,8 @@ export const reactorSlice = createSlice({
 
 export const { addPower, addHeat, sellPower, ventHeat } = reactorSlice.actions;
 
-addListener(gameTick.pending.type, (storeApi, action) => {
-    const { dispatch, getState } = storeApi
+addListener(gameTick.pending.type, (storeApi, _action) => {
+    // const { dispatch, getState } = storeApi
     console.log('reactorSlice gameTick listener')
 })
 

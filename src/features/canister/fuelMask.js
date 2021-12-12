@@ -1,10 +1,4 @@
-import React from "react"
 import { Graphics } from '@pixi/graphics'
-import { Graphics as GraphicsComponent, withApp } from "react-pixi-fiber"
-
-import { useSelector } from "react-redux"
-import { selectMaskRects } from "../geometry/geometrySlice"
-
 
 export const constructMask = (mask_graphic, mask_rect_defs, cluster) => {
     const mask_rects = mask_rect_defs[cluster]

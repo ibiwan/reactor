@@ -15,8 +15,10 @@ const FuelInner = ({
     const grid_size = useSelector(selectGridSize)
 
     const first_mask = useSelector(selectMasks(i, j, cluster))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const mask = useMemo(() => first_mask, [i, j, cluster])
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const fuel_animation = useMemo(() => loadedFuelAnimation(app), [])
     
     const props = {
