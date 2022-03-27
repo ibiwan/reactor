@@ -21,8 +21,7 @@ export const loadTextures = createAsyncThunk(
 export const gameTick = createAsyncThunk(
     'game/tick',
     async (_, { dispatch }) => {
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        dispatch(gameTick())
+        console.log("a")
     }
 )
 

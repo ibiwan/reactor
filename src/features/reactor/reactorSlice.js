@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
+
 import { addListener } from '../../util/listener'
-import { gameTick } from '../game/gameSlice'
 
 const initialState = {
     heat: 0,
@@ -9,30 +9,27 @@ const initialState = {
     power_gained: 0,
     money: 0,
     money_gained: 0,
-}
+};
 
 export const reactorSlice = createSlice({
     name: 'reactor',
     initialState,
     reducers: {
-        addPower: (stateSlice, action) => {
-            const power = action.payload
-            stateSlice.power += power
+        addPower: (stateSlice, { payload: power }) => {
+            stateSlice.power += power;
         },
-        addHeat: (stateSlice, action) => {
-            const heat = action.payload
-            stateSlice.heat += heat
+        addHeat: (stateSlice, { payload: heat }) => {
+            stateSlice.heat += heat;
         },
-        sellPower: (stateSlice, _action) => {
-            stateSlice.money += stateSlice.reactor.power
-            stateSlice.power = 0
+        sellPower: (stateSlice, _) => {
+            stateSlice.money += stateSlice.reactor.power;
+            stateSlice.power = 0;
         },
-        ventHeat: (stateSlice, action) => {
-            const { heat } = action.payload
-            stateSlice.heat -= heat
+        ventHeat: (stateSlice, { payload: heat }) => {
+            stateSlice.heat -= heat;
         },
     },
-})
+});
 
 export const { addPower, addHeat, sellPower, ventHeat } = reactorSlice.actions;
 
@@ -41,4 +38,4 @@ addListener(gameTick.pending.type, (storeApi, _action) => {
     console.log('reactorSlice gameTick listener')
 })
 
-export default reactorSlice.reducer
+export default reactorSlice.reducer;

@@ -11,5 +11,4 @@ ReactDOM.render(
   document.getElementById('root')
 )
 
-// https://bit.ly/CRA-PWA
 serviceWorker.unregister()
